@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EAT04 — COLO 1 MOR Status</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;background:#f4f6f9;color:#1a1a2e}
+.page-header{background:#1a1a2e;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.page-title{font-size:15px;font-weight:600;letter-spacing:0.02em}
+.page-sub{font-size:10px;color:#9ca3af;margin-top:2px}
+.page-date{font-size:10px;color:#9ca3af}
+.main{display:flex;gap:0;background:#fff;min-height:calc(100vh - 80px)}
+/* MAP SIDE */
+.map-side{width:340px;flex-shrink:0;border-right:1px solid #e5e7eb;display:flex;flex-direction:column}
+.col-headers{display:grid;grid-template-columns:1fr 22px 1fr;border-bottom:1px solid #e5e7eb;background:#f9fafb}
+.ch{padding:5px 6px;font-size:9px;font-weight:600;color:#6b7280;text-align:center;letter-spacing:0.05em;text-transform:uppercase}
+.ch:first-child{border-right:1px solid #e5e7eb}
+.ch:last-child{border-left:1px solid #e5e7eb}
+.row3{display:grid;grid-template-columns:1fr 22px 1fr}
+.cell{padding:5px 7px;border-bottom:1px solid #f3f4f6;min-height:40px;display:flex;flex-direction:column;justify-content:center;border-left:3px solid transparent}
+.cell.r-ready{background:#f0faf4;border-left-color:#34a85a}
+.cell.r-staging{background:#fffbeb;border-left-color:#f0b429}
+.cell.r-assigned{background:#eff6ff;border-left-color:#3b82f6}
+.cell.r-special{background:#fff5f0;border-left-color:#f97316}
+.cell.r-empty{background:#fff;border-left-color:#e5e7eb}
+.cell-id{font-size:10px;font-weight:600;color:#111827;line-height:1.3}
+.cell-id.chk::after{content:" ✓";color:#34a85a}
+.cell-sub{font-size:8px;color:#6b7280;margin-top:1px;line-height:1.3}
+.aisle-cell{border-bottom:1px solid #f3f4f6;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;background:#f9fafb}
+.aisle-text{writing-mode:vertical-rl;font-size:6px;letter-spacing:0.14em;color:#9ca3af;text-transform:uppercase}
+.door-circle{width:16px;height:16px;border-radius:50%;background:#1d4ed8;color:#fff;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.divider-row{grid-column:1/-1;background:#1d4ed8;color:#fff;font-size:8px;font-weight:600;text-align:center;padding:5px 8px;letter-spacing:0.04em}
+.entrance-row{grid-column:1/-1;text-align:center;padding:6px;font-size:8px;color:#9ca3af;border-top:1.5px dashed #d1d5db;letter-spacing:0.08em}
+.footer-strip{background:#1a1a2e;color:#9ca3af;font-size:8px;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.legend-strip{display:flex;gap:10px;padding:5px 10px;border-top:1px solid #e5e7eb;flex-wrap:wrap;background:#f9fafb}
+.leg{display:flex;align-items:center;gap:4px;font-size:9px;color:#6b7280}
+.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+/* INFO SIDE */
+.info-side{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.info-scroll{overflow-y:auto;flex:1}
+.update-hdr{background:#5b21b6;color:#fff;padding:8px 14px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:6px}
+.update-body{padding:8px 14px;border-bottom:1px solid #f3f4f6;background:#faf5ff}
+.update-item{display:flex;gap:7px;align-items:flex-start;font-size:10px;color:#1a1a2e;line-height:1.5}
+.upd-dot{width:7px;height:7px;border-radius:50%;background:#7c3aed;margin-top:3px;flex-shrink:0}
+.sec-hdr{padding:7px 14px;font-size:10px;font-weight:600;color:#fff;letter-spacing:0.02em}
+.sec-ready{background:#166534}
+.sec-prd{background:#1e3a5f}
+.sec-assigned{background:#1f2937}
+.sec-summary{background:#1d4ed8}
+.mor-item{padding:7px 14px;border-bottom:1px solid #f3f4f6}
+.mor-item:hover{background:#f9fafb}
+.mor-name{font-size:11px;font-weight:600;color:#111827}
+.mor-desc{font-size:9px;color:#6b7280;margin-top:1px;line-height:1.4}
+.tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.tag{font-size:8px;padding:2px 6px;border-radius:3px;font-weight:600}
+.t-prd{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
+.t-aoc{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
+.t-cu{background:#fff7ed;color:#c2410c;border:1px solid #fdba74}
+.t-psm{background:#dcfce7;color:#166534;border:1px solid #86efac}
+.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 14px}
+.sum-card{border-radius:8px;padding:10px 6px;text-align:center}
+.sum-n{font-size:22px;font-weight:700}
+.sum-l{font-size:9px;margin-top:2px;font-weight:500}
+.sc-r{background:#f0faf4;color:#166534}
+.sc-s{background:#fffbeb;color:#92400e}
+.sc-a{background:#eff6ff;color:#1e40af}
+.sc-e{background:#f9fafb;color:#6b7280}
+@media(max-width:680px){
+  .main{flex-direction:column}
+  .map-side{width:100%;border-right:none;border-bottom:1px solid #e5e7eb}
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="page-title">EAT04 — COLO 1 MOR Status</div>
+    <div class="page-sub">Middle of Row units · Low Side (116) &amp; High Side (158)</div>
+  </div>
+  <div class="page-date">Updated: Apr 15, 2026</div>
+</div>
+
+<div class="main">
+
+  <!-- MAP -->
+  <div class="map-side">
+    <div class="col-headers">
+      <div class="ch">Low Side (116)</div>
+      <div class="ch"></div>
+      <div class="ch">High Side (158)</div>
+    </div>
+
+    <div>
+      <div class="row3">
+        <div class="cell r-special"><div class="cell-id">EM116 IDF3</div><div class="cell-sub">Hack Room</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">EM158 IDF4</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">EM116 Row2</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">EM158 Row2</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-ready"><div class="cell-id chk">ED116</div><div class="cell-sub">R&amp;S · PRD 10 · LCs · Power</div></div>
+        <div class="aisle-cell"><div class="aisle-text">A I S L E</div></div>
+        <div class="cell r-assigned"><div class="cell-id">ED158</div><div class="cell-sub">Brooksource</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">DY116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">DY158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-staging"><div class="cell-id">DU116</div><div class="cell-sub">R&amp;S devices · PRD 10 · Cu · No power</div></div>
+        <div class="aisle-cell"><div class="door-circle">D</div></div>
+        <div class="cell r-empty"><div class="cell-id">DU158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">DP116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">DP158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">DI116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">DI158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-ready"><div class="cell-id chk">DC116</div><div class="cell-sub">R&amp;S · PSM4 · InMorCu · PRD10 · AOC10</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-ready"><div class="cell-id chk">DG158</div><div class="cell-sub">R&amp;S · PSM4 · InMorCu · 20PRD · AOC</div></div>
+      </div>
+      <div class="row3">
+        <div class="divider-row">Cell 1 ↓ &nbsp; Cell 3 ↑ &nbsp;/&nbsp; Cell 2 ↓ &nbsp; Cell 4 ↑</div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">DG116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">DC158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">Cx116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-ready"><div class="cell-id chk">DL158</div><div class="cell-sub">R&amp;S · PSM4 · InMorCu · LCs · AOC · PRD10</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">BR116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">BR158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-staging"><div class="cell-id">BM116</div><div class="cell-sub">Extra cables only</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">BM158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">BI116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-ready"><div class="cell-id chk">BI158</div><div class="cell-sub">R&amp;S · PSM4 · LCs · Power · InMorCu · PRD10</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">BD116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"><div class="aisle-text">A I S L E</div></div>
+        <div class="cell r-empty"><div class="cell-id">BD158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">AZ116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">AZ158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">AU116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"><div class="door-circle">D</div></div>
+        <div class="cell r-empty"><div class="cell-id">AU158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">AQ116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">AQ158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-assigned"><div class="cell-id">AL116</div><div class="cell-sub">Brooksource</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">AL158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-empty"><div class="cell-id">AH116</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-empty"><div class="cell-id">AH158</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="cell r-special"><div class="cell-id">AC116 (idf 1)</div><div class="cell-sub">Empty</div></div>
+        <div class="aisle-cell"></div>
+        <div class="cell r-special"><div class="cell-id">AC158 (idf 2)</div><div class="cell-sub">Empty</div></div>
+      </div>
+      <div class="row3">
+        <div class="entrance-row">↑ Entrance</div>
+      </div>
+    </div>
+
+    <div class="footer-strip">
+      <span>Prepared by: Victor Valdez · Prime Technical Services · EAT04</span>
+      <span>Apr 15, 2026</span>
+    </div>
+    <div class="legend-strip">
+      <div class="leg"><div class="leg-sq" style="background:#f0faf4;border:1px solid #34a85a"></div>Ready</div>
+      <div class="leg"><div class="leg-sq" style="background:#fffbeb;border:1px solid #f0b429"></div>Staging</div>
+      <div class="leg"><div class="leg-sq" style="background:#eff6ff;border:1px solid #3b82f6"></div>Assigned</div>
+      <div class="leg"><div class="leg-sq" style="background:#fff5f0;border:1px solid #f97316"></div>Special</div>
+      <div class="leg"><div class="leg-sq" style="background:#f9fafb;border:1px solid #d1d5db"></div>Empty</div>
+    </div>
+  </div>
+
+  <!-- INFO PANEL -->
+  <div class="info-side">
+    <div class="info-scroll">
+
+      <div class="update-hdr">&#9679; Today's Update — Apr 15, 2026</div>
+      <div class="update-body">
+        <div class="update-item">
+          <div class="upd-dot"></div>
+          <div><strong>DL158</strong> — AOC and Copper for 10 PRD racks arrived. Now fully ready: R&amp;S · PSM4 · LCs · Power · InMor Copper · AOC · PRD 10.</div>
+        </div>
+      </div>
+
+      <div class="sec-hdr sec-ready">&#10003; Ready — 6 MORs</div>
+      <div class="mor-item">
+        <div class="mor-name">ED116</div>
+        <div class="mor-desc">R&amp;S · PRD 10 · LCs · Power · No InMor Copper</div>
+      </div>
+      <div class="mor-item">
+        <div class="mor-name">DC116</div>
+        <div class="mor-desc">R&amp;S · PSM4 · LCs · Power · InMor Copper · PRD 10 · AOC 10</div>
+        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC 10</span><span class="tag t-cu">InMor Cu</span></div>
+      </div>
+      <div class="mor-item">
+        <div class="mor-name">DG158</div>
+        <div class="mor-desc">R&amp;S · PSM4 · InMor Copper · LCs · 20 PRD racks · AOC · No Cu for racks</div>
+        <div class="tags"><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span></div>
+      </div>
+      <div class="mor-item">
+        <div class="mor-name">DL158</div>
+        <div class="mor-desc">R&amp;S · PSM4 · LCs · Power · InMor Copper · AOC · PRD 10</div>
+        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
+      </div>
+      <div class="mor-item">
+        <div class="mor-name">BI158</div>
+        <div class="mor-desc">R&amp;S · PSM4 · LCs · Power · InMor Copper · PRD 10</div>
+        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
+      </div>
+      <div class="mor-item">
+        <div class="mor-name">ED116</div>
+        <div class="mor-desc">R&amp;S · PRD 10 · LCs · Power · No InMor Copper</div>
+      </div>
+
+      <div class="sec-hdr sec-prd">PRD Complete (R&amp;S + Copper + AOC + PRD) — 2 MORs</div>
+      <div class="mor-item">
+        <div class="mor-name">DC116</div>
+        <div class="mor-desc">PRD 10 · AOC 10 · InMor Copper · PSM4 · LCs · Power</div>
+        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC 10</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
+      </div>
+      <div class="mor-item">
+        <div class="mor-name">DL158</div>
+        <div class="mor-desc">PRD 10 · AOC · InMor Copper · PSM4 · LCs · Power</div>
+        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
+      </div>
+
+      <div class="sec-hdr sec-assigned">Assigned — 2 MORs</div>
+      <div class="mor-item">
+        <div class="mor-name">AL116</div>
+        <div class="mor-desc">Brooksource</div>
+      </div>
+      <div class="mor-item">
+        <div class="mor-name">ED158</div>
+        <div class="mor-desc">Brooksource</div>
+      </div>
+
+      <div class="sec-hdr sec-summary">Summary — Victor Valdez · PrimeTS · 40 MORs total</div>
+      <div class="sum-grid">
+        <div class="sum-card sc-r"><div class="sum-n">6</div><div class="sum-l">Ready</div></div>
+        <div class="sum-card sc-s"><div class="sum-n">3</div><div class="sum-l">Staging</div></div>
+        <div class="sum-card sc-a"><div class="sum-n">2</div><div class="sum-l">Assigned</div></div>
+        <div class="sum-card sc-e"><div class="sum-n">29</div><div class="sum-l">Empty</div></div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
