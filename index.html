@@ -1,295 +1,398 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EAT04 — COLO 1 MOR Status</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;background:#f4f6f9;color:#1a1a2e}
-.page-header{background:#1a1a2e;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
-.page-title{font-size:15px;font-weight:600;letter-spacing:0.02em}
-.page-sub{font-size:10px;color:#9ca3af;margin-top:2px}
-.page-date{font-size:10px;color:#9ca3af}
-.main{display:flex;gap:0;background:#fff;min-height:calc(100vh - 80px)}
-/* MAP SIDE */
-.map-side{width:340px;flex-shrink:0;border-right:1px solid #e5e7eb;display:flex;flex-direction:column}
-.col-headers{display:grid;grid-template-columns:1fr 22px 1fr;border-bottom:1px solid #e5e7eb;background:#f9fafb}
-.ch{padding:5px 6px;font-size:9px;font-weight:600;color:#6b7280;text-align:center;letter-spacing:0.05em;text-transform:uppercase}
-.ch:first-child{border-right:1px solid #e5e7eb}
-.ch:last-child{border-left:1px solid #e5e7eb}
-.row3{display:grid;grid-template-columns:1fr 22px 1fr}
-.cell{padding:5px 7px;border-bottom:1px solid #f3f4f6;min-height:40px;display:flex;flex-direction:column;justify-content:center;border-left:3px solid transparent}
-.cell.r-ready{background:#f0faf4;border-left-color:#34a85a}
-.cell.r-staging{background:#fffbeb;border-left-color:#f0b429}
-.cell.r-assigned{background:#eff6ff;border-left-color:#3b82f6}
-.cell.r-special{background:#fff5f0;border-left-color:#f97316}
-.cell.r-empty{background:#fff;border-left-color:#e5e7eb}
-.cell-id{font-size:10px;font-weight:600;color:#111827;line-height:1.3}
-.cell-id.chk::after{content:" ✓";color:#34a85a}
-.cell-sub{font-size:8px;color:#6b7280;margin-top:1px;line-height:1.3}
-.aisle-cell{border-bottom:1px solid #f3f4f6;border-left:1px solid #e5e7eb;border-right:1px solid #e5e7eb;display:flex;align-items:center;justify-content:center;background:#f9fafb}
-.aisle-text{writing-mode:vertical-rl;font-size:6px;letter-spacing:0.14em;color:#9ca3af;text-transform:uppercase}
-.door-circle{width:16px;height:16px;border-radius:50%;background:#1d4ed8;color:#fff;font-size:7px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.divider-row{grid-column:1/-1;background:#1d4ed8;color:#fff;font-size:8px;font-weight:600;text-align:center;padding:5px 8px;letter-spacing:0.04em}
-.entrance-row{grid-column:1/-1;text-align:center;padding:6px;font-size:8px;color:#9ca3af;border-top:1.5px dashed #d1d5db;letter-spacing:0.08em}
-.footer-strip{background:#1a1a2e;color:#9ca3af;font-size:8px;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
-.legend-strip{display:flex;gap:10px;padding:5px 10px;border-top:1px solid #e5e7eb;flex-wrap:wrap;background:#f9fafb}
-.leg{display:flex;align-items:center;gap:4px;font-size:9px;color:#6b7280}
-.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-/* INFO SIDE */
-.info-side{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.info-scroll{overflow-y:auto;flex:1}
-.update-hdr{background:#5b21b6;color:#fff;padding:8px 14px;font-size:10px;font-weight:600;display:flex;align-items:center;gap:6px}
-.update-body{padding:8px 14px;border-bottom:1px solid #f3f4f6;background:#faf5ff}
-.update-item{display:flex;gap:7px;align-items:flex-start;font-size:10px;color:#1a1a2e;line-height:1.5}
-.upd-dot{width:7px;height:7px;border-radius:50%;background:#7c3aed;margin-top:3px;flex-shrink:0}
-.sec-hdr{padding:7px 14px;font-size:10px;font-weight:600;color:#fff;letter-spacing:0.02em}
-.sec-ready{background:#166534}
-.sec-prd{background:#1e3a5f}
-.sec-assigned{background:#1f2937}
-.sec-summary{background:#1d4ed8}
-.mor-item{padding:7px 14px;border-bottom:1px solid #f3f4f6}
-.mor-item:hover{background:#f9fafb}
-.mor-name{font-size:11px;font-weight:600;color:#111827}
-.mor-desc{font-size:9px;color:#6b7280;margin-top:1px;line-height:1.4}
-.tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
-.tag{font-size:8px;padding:2px 6px;border-radius:3px;font-weight:600}
-.t-prd{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd}
-.t-aoc{background:#ede9fe;color:#5b21b6;border:1px solid #c4b5fd}
-.t-cu{background:#fff7ed;color:#c2410c;border:1px solid #fdba74}
-.t-psm{background:#dcfce7;color:#166534;border:1px solid #86efac}
-.sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 14px}
-.sum-card{border-radius:8px;padding:10px 6px;text-align:center}
-.sum-n{font-size:22px;font-weight:700}
-.sum-l{font-size:9px;margin-top:2px;font-weight:500}
-.sc-r{background:#f0faf4;color:#166534}
-.sc-s{background:#fffbeb;color:#92400e}
-.sc-a{background:#eff6ff;color:#1e40af}
-.sc-e{background:#f9fafb;color:#6b7280}
-@media(max-width:680px){
-  .main{flex-direction:column}
-  .map-side{width:100%;border-right:none;border-bottom:1px solid #e5e7eb}
-}
+* { box-sizing: border-box; }
+.wrap{display:flex;gap:14px;font-family:Arial,sans-serif;background:#F8FAFC;}
+.map-col{flex:0 0 320px;}
+.right-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px;}
+.section{border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;background:#ffffff;}
+.sec-hdr{padding:7px 12px;font-size:11px;font-weight:500;color:#fff;}
+.hdr-ready{background:#065F46;}
+.hdr-prd{background:#1B6B8A;}
+.hdr-summary{background:#1F2937;}
+.hdr-today{background:#7C3AED;}
+.hdr-progress{background:#4C1D95;}
+.sec-body{padding:8px 12px;background:#ffffff;}
+.mor-row{display:flex;flex-direction:column;padding:5px 0;border-bottom:1px solid #F1F5F9;}
+.mor-row:last-child{border-bottom:none;}
+.mor-name{font-size:12px;font-weight:500;color:#1F2937;}
+.mor-detail{font-size:10px;color:#64748B;margin-top:2px;line-height:1.4;}
+.mor-warn{font-size:10px;color:#B45309;margin-top:2px;line-height:1.4;}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;margin-right:3px;margin-top:2px;}
+.t-prd{background:#E6F1FB;color:#0C447C;}
+.t-aoc{background:#EEEDFE;color:#26215C;}
+.t-cu{background:#FEF3C7;color:#633806;}
+.t-ps{background:#FAECE7;color:#4A1B0C;}
+.t-warn{background:#FEE2E2;color:#991B1B;}
+.t-prog{background:#EDE9FE;color:#4C1D95;}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:10px 12px;background:#ffffff;}
+.stat-card{text-align:center;padding:8px 4px;border-radius:6px;}
+.stat-num{font-size:22px;font-weight:500;}
+.stat-lbl{font-size:10px;margin-top:2px;}
+.s-ready{background:#D1FAE5;} .s-ready .stat-num{color:#065F46;} .s-ready .stat-lbl{color:#059669;}
+.s-staging{background:#FEF3C7;} .s-staging .stat-num{color:#92400E;} .s-staging .stat-lbl{color:#D97706;}
+.s-assigned{background:#DBEAFE;} .s-assigned .stat-num{color:#1E3A8A;} .s-assigned .stat-lbl{color:#2563EB;}
+.s-empty{background:#F3F4F6;} .s-empty .stat-num{color:#374151;} .s-empty .stat-lbl{color:#6B7280;}
+.s-progress{background:#EDE9FE;} .s-progress .stat-num{color:#4C1D95;} .s-progress .stat-lbl{color:#6D28D9;}
+.credit{font-size:10px;color:#94A3B8;text-align:center;margin-top:6px;}
+.update-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #F1F5F9;}
+.update-item:last-child{border-bottom:none;}
+.update-dot{width:8px;height:8px;border-radius:50%;background:#7C3AED;margin-top:3px;flex-shrink:0;}
+.update-text{font-size:11px;color:#64748B;line-height:1.4;}
+.update-mor{font-weight:500;color:#1F2937;}
 </style>
-</head>
-<body>
 
-<div class="page-header">
-  <div>
-    <div class="page-title">EAT04 — COLO 1 MOR Status</div>
-    <div class="page-sub">Middle of Row units · Low Side (116) &amp; High Side (158)</div>
-  </div>
-  <div class="page-date">Updated: Apr 15, 2026</div>
+<div class="wrap">
+<div class="map-col">
+<svg width="100%" viewBox="0 0 320 1090" role="img" style="background:#F8FAFC;">
+  <title>EAT04 COLO 1 — Victor Valdez</title>
+  <desc>EAT04 COLO 1 Logistics Map Apr 16 2026</desc>
+
+  <!-- WATERMARK -->
+  <g opacity="0.055" style="pointer-events:none">
+    <text transform="rotate(-45,160,540)" x="-80" y="240" style="font-size:19px;font-weight:500;fill:#1B6B8A;font-family:Arial;">Victor Valdez · PrimeTS · EAT04</text>
+    <text transform="rotate(-45,160,540)" x="-80" y="440" style="font-size:19px;font-weight:500;fill:#1B6B8A;font-family:Arial;">Victor Valdez · PrimeTS · EAT04</text>
+    <text transform="rotate(-45,160,540)" x="-80" y="640" style="font-size:19px;font-weight:500;fill:#1B6B8A;font-family:Arial;">Victor Valdez · PrimeTS · EAT04</text>
+    <text transform="rotate(-45,160,540)" x="-80" y="840" style="font-size:19px;font-weight:500;fill:#1B6B8A;font-family:Arial;">Victor Valdez · PrimeTS · EAT04</text>
+  </g>
+
+  <rect x="2" y="18" width="316" height="1040" rx="4" fill="#FFFFFF" stroke="#1F2937" stroke-width="2"/>
+  <rect x="138" y="18" width="38" height="1040" fill="#F1F5F9"/>
+  <line x1="138" y1="18" x2="138" y2="1058" stroke="#CBD5E1" stroke-width="1"/>
+  <line x1="176" y1="18" x2="176" y2="1058" stroke="#CBD5E1" stroke-width="1"/>
+  <text x="69" y="11" text-anchor="middle" style="font-size:9px;font-weight:500;fill:#64748B;font-family:Arial;">Low Side (116)</text>
+  <text x="247" y="11" text-anchor="middle" style="font-size:9px;font-weight:500;fill:#64748B;font-family:Arial;">High Side (158)</text>
+
+  <!-- PAIR 1: EM116 IDF3 + EH116 Row2 / EM158 IDF4 + EH158 Row2 -->
+  <rect x="4" y="24" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="38" dominant-baseline="central" style="font-size:9px;fill:#374151;font-family:Arial;">EM116 IDF3</text>
+  <text x="9" y="52" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Hack Room</text>
+  <rect x="179" y="24" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="38" dominant-baseline="central" style="font-size:9px;fill:#374151;font-family:Arial;">EM158 IDF4</text>
+  <text x="184" y="52" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <line x1="4" y1="64" x2="135" y2="64" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="64" x2="316" y2="64" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="64" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="78" dominant-baseline="central" style="font-size:9px;fill:#374151;font-family:Arial;">EH116 Row2</text>
+  <text x="9" y="92" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="64" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="78" dominant-baseline="central" style="font-size:9px;fill:#374151;font-family:Arial;">EH158 Row2</text>
+  <text x="184" y="92" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="104" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="104" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 2: ED116 ASSIGNED + DY116 / ED158 + DY158 -->
+  <rect x="4" y="109" width="131" height="40" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="0.5"/>
+  <text x="9" y="123" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1E3A8A;font-family:Arial;">ED116</text>
+  <text x="9" y="137" dominant-baseline="central" style="font-size:8px;fill:#1E3A8A;font-family:Arial;">Brooksource</text>
+  <rect x="179" y="109" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="123" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">ED158</text>
+  <text x="184" y="137" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <line x1="4" y1="149" x2="135" y2="149" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="149" x2="316" y2="149" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="149" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="163" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DY116</text>
+  <text x="9" y="177" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="149" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="163" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DY158</text>
+  <text x="184" y="177" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="189" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="189" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 3: DU116 STAGING door + DP116 -->
+  <rect x="4" y="194" width="131" height="40" rx="2" fill="#FEF3C7" stroke="#D97706" stroke-width="0.5"/>
+  <text x="9" y="208" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#92400E;font-family:Arial;">DU116</text>
+  <text x="9" y="222" dominant-baseline="central" style="font-size:8px;fill:#92400E;font-family:Arial;">R&amp;S devices · PRD 10 · Cu · No power</text>
+  <rect x="134" y="204" width="12" height="20" rx="2" fill="#1B6B8A"/>
+  <text x="140" y="214" text-anchor="middle" dominant-baseline="central" style="font-size:7px;font-weight:500;fill:#ffffff;font-family:Arial;">D</text>
+  <rect x="179" y="194" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="208" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DU158</text>
+  <text x="184" y="222" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <line x1="4" y1="234" x2="135" y2="234" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="234" x2="316" y2="234" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="234" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="248" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DP116</text>
+  <text x="9" y="262" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="234" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="248" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DP158</text>
+  <text x="184" y="262" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="274" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="274" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 4: DL116 + DC116 READY / DL158 READY + DG158 IN PROGRESS (green + warning note) -->
+  <rect x="4" y="279" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="293" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DL116</text>
+  <text x="9" y="307" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="279" width="137" height="40" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="0.5"/>
+  <text x="184" y="293" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#065F46;font-family:Arial;">DL158 ✓</text>
+  <text x="184" y="307" dominant-baseline="central" style="font-size:8px;fill:#065F46;font-family:Arial;">R&amp;S·PSM4·InMorCu·LCs·AOC·PRD20·Cu</text>
+  <line x1="4" y1="319" x2="135" y2="319" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="319" x2="316" y2="319" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="319" width="131" height="40" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="0.5"/>
+  <text x="9" y="333" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#065F46;font-family:Arial;">DC116 ✓</text>
+  <text x="9" y="347" dominant-baseline="central" style="font-size:8px;fill:#065F46;font-family:Arial;">R&amp;S·PSM4·InMorCu·PRD20·AOC·Cu</text>
+  <!-- DG158 — green with purple border = In Progress -->
+  <rect x="179" y="319" width="137" height="40" rx="2" fill="#EDE9FE" stroke="#4C1D95" stroke-width="1.5"/>
+  <text x="184" y="330" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#4C1D95;font-family:Arial;">DG158 🔧</text>
+  <text x="184" y="342" dominant-baseline="central" style="font-size:7.5px;fill:#4C1D95;font-family:Arial;">R&amp;S·PSM4·InMorCu·AOC·PRD20</text>
+  <text x="184" y="354" dominant-baseline="central" style="font-size:7px;fill:#B45309;font-family:Arial;">⚠ Pending: PRD Copper for 20 racks</text>
+  <rect x="4" y="359" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="359" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- Aisle top -->
+  <text x="157" y="170" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">A</text>
+  <text x="157" y="181" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">I</text>
+  <text x="157" y="192" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">S</text>
+  <text x="157" y="203" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">L</text>
+  <text x="157" y="214" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">E</text>
+
+  <!-- Blue divider -->
+  <rect x="2" y="364" width="316" height="22" fill="#1B6B8A"/>
+  <text x="69" y="377" text-anchor="middle" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#ffffff;font-family:Arial;">Cell 1 ↓  Cell 3 ↑</text>
+  <text x="247" y="377" text-anchor="middle" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#ffffff;font-family:Arial;">Cell 2 ↓  Cell 4 ↑</text>
+
+  <!-- PAIR 5: DG116 + Cx116 / DC158 READY + CX158 -->
+  <rect x="4" y="386" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="400" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DG116</text>
+  <text x="9" y="414" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="386" width="137" height="40" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="0.5"/>
+  <text x="184" y="400" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#065F46;font-family:Arial;">DC158 ✓</text>
+  <text x="184" y="414" dominant-baseline="central" style="font-size:8px;fill:#065F46;font-family:Arial;">R&amp;S·PSM4·InMorCu·PRD20·AOC·Cu</text>
+  <line x1="4" y1="426" x2="135" y2="426" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="426" x2="316" y2="426" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="426" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="440" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">Cx116</text>
+  <text x="9" y="454" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="426" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="440" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">CX158</text>
+  <text x="184" y="454" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="466" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="466" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 6: BR + BM116 STAGING -->
+  <rect x="4" y="471" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="485" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BR116</text>
+  <text x="9" y="499" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="471" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="485" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BR158</text>
+  <text x="184" y="499" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <line x1="4" y1="511" x2="135" y2="511" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="511" x2="316" y2="511" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="511" width="131" height="40" rx="2" fill="#FEF3C7" stroke="#D97706" stroke-width="0.5"/>
+  <text x="9" y="525" dominant-baseline="central" style="font-size:9px;fill:#92400E;font-family:Arial;">BM116</text>
+  <text x="9" y="539" dominant-baseline="central" style="font-size:8px;fill:#92400E;font-family:Arial;">Extra cables only</text>
+  <rect x="179" y="511" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="525" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BM158</text>
+  <text x="184" y="539" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="551" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="551" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 7: BI116 + BD116 / BI158 READY + BD158 -->
+  <rect x="4" y="556" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="570" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BI116</text>
+  <text x="9" y="584" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="556" width="137" height="40" rx="2" fill="#D1FAE5" stroke="#059669" stroke-width="0.5"/>
+  <text x="184" y="570" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#065F46;font-family:Arial;">BI158 ✓</text>
+  <text x="184" y="584" dominant-baseline="central" style="font-size:8px;fill:#065F46;font-family:Arial;">R&amp;S·PSM4·LCs·Power·InMorCu·PRD20·AOC·Cu</text>
+  <line x1="4" y1="596" x2="135" y2="596" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="596" x2="316" y2="596" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="596" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="610" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BD116</text>
+  <text x="9" y="624" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="596" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="610" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BD158</text>
+  <text x="184" y="624" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="636" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="636" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 8: AZ + AU DOOR -->
+  <rect x="4" y="641" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="655" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AZ116</text>
+  <text x="9" y="669" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="641" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="655" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AZ158</text>
+  <text x="184" y="669" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <line x1="4" y1="681" x2="135" y2="681" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="681" x2="316" y2="681" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="681" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="695" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AU116</text>
+  <text x="9" y="709" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="134" y="691" width="12" height="20" rx="2" fill="#1B6B8A"/>
+  <text x="140" y="701" text-anchor="middle" dominant-baseline="central" style="font-size:7px;font-weight:500;fill:#ffffff;font-family:Arial;">D</text>
+  <rect x="179" y="681" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="695" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AU158</text>
+  <text x="184" y="709" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="721" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="721" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 9: AQ + AL116 ASSIGNED -->
+  <rect x="4" y="726" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="740" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AQ116</text>
+  <text x="9" y="754" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="726" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="740" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AQ158</text>
+  <text x="184" y="754" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <line x1="4" y1="766" x2="135" y2="766" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="766" x2="316" y2="766" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="766" width="131" height="40" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="0.5"/>
+  <text x="9" y="780" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1E3A8A;font-family:Arial;">AL116</text>
+  <text x="9" y="794" dominant-baseline="central" style="font-size:8px;fill:#1E3A8A;font-family:Arial;">Brooksource</text>
+  <rect x="179" y="766" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="780" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AL158</text>
+  <text x="184" y="794" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="4" y="806" width="131" height="5" fill="#F1F5F9"/>
+  <rect x="179" y="806" width="137" height="5" fill="#F1F5F9"/>
+
+  <!-- PAIR 10: AH + AC -->
+  <rect x="4" y="811" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="825" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AH116</text>
+  <text x="9" y="839" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="811" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="825" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AH158</text>
+  <text x="184" y="839" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <line x1="4" y1="851" x2="135" y2="851" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="851" x2="316" y2="851" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <rect x="4" y="851" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="9" y="865" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AC116 (idf 1)</text>
+  <text x="9" y="879" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+  <rect x="179" y="851" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
+  <text x="184" y="865" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AC158 (idf 2)</text>
+  <text x="184" y="879" dominant-baseline="central" style="font-size:8px;fill:#9CA3AF;font-family:Arial;">Empty</text>
+
+  <!-- Aisle bottom -->
+  <text x="157" y="610" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">A</text>
+  <text x="157" y="621" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">I</text>
+  <text x="157" y="632" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">S</text>
+  <text x="157" y="643" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">L</text>
+  <text x="157" y="654" text-anchor="middle" style="font-size:8px;font-weight:500;fill:#CBD5E1;font-family:Arial;">E</text>
+
+  <!-- Legend -->
+  <rect x="2" y="895" width="316" height="36" rx="3" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="0.5"/>
+  <rect x="8" y="903" width="9" height="7" rx="1" fill="#D1FAE5" stroke="#059669" stroke-width="0.5"/>
+  <text x="20" y="907" dominant-baseline="central" style="font-size:7px;fill:#64748B;font-family:Arial;">Ready</text>
+  <rect x="58" y="903" width="9" height="7" rx="1" fill="#FEF3C7" stroke="#D97706" stroke-width="0.5"/>
+  <text x="70" y="907" dominant-baseline="central" style="font-size:7px;fill:#64748B;font-family:Arial;">Staging</text>
+  <rect x="110" y="903" width="9" height="7" rx="1" fill="#DBEAFE" stroke="#2563EB" stroke-width="0.5"/>
+  <text x="122" y="907" dominant-baseline="central" style="font-size:7px;fill:#64748B;font-family:Arial;">Assigned</text>
+  <rect x="172" y="903" width="9" height="7" rx="1" fill="#EDE9FE" stroke="#4C1D95" stroke-width="1"/>
+  <text x="184" y="907" dominant-baseline="central" style="font-size:7px;fill:#64748B;font-family:Arial;">In Progress</text>
+  <rect x="240" y="903" width="9" height="7" rx="1" fill="#FFFFFF" stroke="#1B6B8A" stroke-width="1.5"/>
+  <text x="252" y="907" dominant-baseline="central" style="font-size:7px;fill:#64748B;font-family:Arial;">Door</text>
+
+  <!-- Entrance -->
+  <rect x="136" y="938" width="48" height="14" fill="#FFFFFF"/>
+  <path d="M136 938 Q160 922 184 938" fill="none" stroke="#1B6B8A" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text x="160" y="956" text-anchor="middle" style="font-size:8px;fill:#1B6B8A;font-weight:500;font-family:Arial;">Entrance</text>
+
+  <!-- Footer -->
+  <rect x="2" y="970" width="316" height="28" rx="3" fill="#0F172A"/>
+  <text x="10" y="986" dominant-baseline="central" style="font-size:8px;font-weight:500;fill:#94A3B8;font-family:Arial;">Prepared by: Victor Valdez · Prime Technical Services · EAT04</text>
+  <text x="306" y="986" text-anchor="end" dominant-baseline="central" style="font-size:8px;fill:#475569;font-family:Arial;">Apr 16, 2026</text>
+</svg>
+<div class="credit">© Victor Valdez · Prime Technical Services · EAT04 · Apr 16, 2026</div>
 </div>
 
-<div class="main">
-
-  <!-- MAP -->
-  <div class="map-side">
-    <div class="col-headers">
-      <div class="ch">Low Side (116)</div>
-      <div class="ch"></div>
-      <div class="ch">High Side (158)</div>
-    </div>
-
-    <div>
-      <div class="row3">
-        <div class="cell r-special"><div class="cell-id">EM116 IDF3</div><div class="cell-sub">Hack Room</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">EM158 IDF4</div><div class="cell-sub">Empty</div></div>
+<!-- RIGHT COLUMN -->
+<div class="right-col">
+  <div class="section">
+    <div class="sec-hdr hdr-today">Today's Update — Apr 16, 2026</div>
+    <div class="sec-body">
+      <div class="update-item">
+        <div class="update-dot"></div>
+        <div class="update-text"><span class="update-mor">DG158</span> — R&amp;S In Progress. R&amp;S · PSM4 · InMor Copper · AOC · PRD 20 present. Pending: PRD Copper for 20 racks.</div>
       </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">EM116 Row2</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">EM158 Row2</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-ready"><div class="cell-id chk">ED116</div><div class="cell-sub">R&amp;S · PRD 10 · LCs · Power</div></div>
-        <div class="aisle-cell"><div class="aisle-text">A I S L E</div></div>
-        <div class="cell r-assigned"><div class="cell-id">ED158</div><div class="cell-sub">Brooksource</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">DY116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">DY158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-staging"><div class="cell-id">DU116</div><div class="cell-sub">R&amp;S devices · PRD 10 · Cu · No power</div></div>
-        <div class="aisle-cell"><div class="door-circle">D</div></div>
-        <div class="cell r-empty"><div class="cell-id">DU158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">DP116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">DP158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">DI116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">DI158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-ready"><div class="cell-id chk">DC116</div><div class="cell-sub">R&amp;S · PSM4 · InMorCu · PRD10 · AOC10</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-ready"><div class="cell-id chk">DG158</div><div class="cell-sub">R&amp;S · PSM4 · InMorCu · 20PRD · AOC</div></div>
-      </div>
-      <div class="row3">
-        <div class="divider-row">Cell 1 ↓ &nbsp; Cell 3 ↑ &nbsp;/&nbsp; Cell 2 ↓ &nbsp; Cell 4 ↑</div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">DG116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">DC158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">Cx116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-ready"><div class="cell-id chk">DL158</div><div class="cell-sub">R&amp;S · PSM4 · InMorCu · LCs · AOC · PRD10</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">BR116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">BR158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-staging"><div class="cell-id">BM116</div><div class="cell-sub">Extra cables only</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">BM158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">BI116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-ready"><div class="cell-id chk">BI158</div><div class="cell-sub">R&amp;S · PSM4 · LCs · Power · InMorCu · PRD10</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">BD116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"><div class="aisle-text">A I S L E</div></div>
-        <div class="cell r-empty"><div class="cell-id">BD158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">AZ116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">AZ158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">AU116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"><div class="door-circle">D</div></div>
-        <div class="cell r-empty"><div class="cell-id">AU158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">AQ116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">AQ158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-assigned"><div class="cell-id">AL116</div><div class="cell-sub">Brooksource</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">AL158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-empty"><div class="cell-id">AH116</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-empty"><div class="cell-id">AH158</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="cell r-special"><div class="cell-id">AC116 (idf 1)</div><div class="cell-sub">Empty</div></div>
-        <div class="aisle-cell"></div>
-        <div class="cell r-special"><div class="cell-id">AC158 (idf 2)</div><div class="cell-sub">Empty</div></div>
-      </div>
-      <div class="row3">
-        <div class="entrance-row">↑ Entrance</div>
-      </div>
-    </div>
-
-    <div class="footer-strip">
-      <span>Prepared by: Victor Valdez · Prime Technical Services · EAT04</span>
-      <span>Apr 15, 2026</span>
-    </div>
-    <div class="legend-strip">
-      <div class="leg"><div class="leg-sq" style="background:#f0faf4;border:1px solid #34a85a"></div>Ready</div>
-      <div class="leg"><div class="leg-sq" style="background:#fffbeb;border:1px solid #f0b429"></div>Staging</div>
-      <div class="leg"><div class="leg-sq" style="background:#eff6ff;border:1px solid #3b82f6"></div>Assigned</div>
-      <div class="leg"><div class="leg-sq" style="background:#fff5f0;border:1px solid #f97316"></div>Special</div>
-      <div class="leg"><div class="leg-sq" style="background:#f9fafb;border:1px solid #d1d5db"></div>Empty</div>
     </div>
   </div>
 
-  <!-- INFO PANEL -->
-  <div class="info-side">
-    <div class="info-scroll">
-
-      <div class="update-hdr">&#9679; Today's Update — Apr 15, 2026</div>
-      <div class="update-body">
-        <div class="update-item">
-          <div class="upd-dot"></div>
-          <div><strong>DL158</strong> — AOC and Copper for 10 PRD racks arrived. Now fully ready: R&amp;S · PSM4 · LCs · Power · InMor Copper · AOC · PRD 10.</div>
-        </div>
+  <div class="section">
+    <div class="sec-hdr hdr-progress">🔧 In Progress — 1 MOR</div>
+    <div class="sec-body">
+      <div class="mor-row">
+        <span class="mor-name">DG158</span>
+        <span class="mor-detail">R&amp;S · PSM4 · InMor Copper · LCs · AOC · PRD 20</span>
+        <span class="mor-warn">⚠️ Pending: PRD Copper for 20 racks</span>
+        <div><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-prd">PRD 20</span><span class="tag t-warn">No PRD Cu</span></div>
       </div>
-
-      <div class="sec-hdr sec-ready">&#10003; Ready — 6 MORs</div>
-      <div class="mor-item">
-        <div class="mor-name">ED116</div>
-        <div class="mor-desc">R&amp;S · PRD 10 · LCs · Power · No InMor Copper</div>
-      </div>
-      <div class="mor-item">
-        <div class="mor-name">DC116</div>
-        <div class="mor-desc">R&amp;S · PSM4 · LCs · Power · InMor Copper · PRD 10 · AOC 10</div>
-        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC 10</span><span class="tag t-cu">InMor Cu</span></div>
-      </div>
-      <div class="mor-item">
-        <div class="mor-name">DG158</div>
-        <div class="mor-desc">R&amp;S · PSM4 · InMor Copper · LCs · 20 PRD racks · AOC · No Cu for racks</div>
-        <div class="tags"><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span></div>
-      </div>
-      <div class="mor-item">
-        <div class="mor-name">DL158</div>
-        <div class="mor-desc">R&amp;S · PSM4 · LCs · Power · InMor Copper · AOC · PRD 10</div>
-        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
-      </div>
-      <div class="mor-item">
-        <div class="mor-name">BI158</div>
-        <div class="mor-desc">R&amp;S · PSM4 · LCs · Power · InMor Copper · PRD 10</div>
-        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
-      </div>
-      <div class="mor-item">
-        <div class="mor-name">ED116</div>
-        <div class="mor-desc">R&amp;S · PRD 10 · LCs · Power · No InMor Copper</div>
-      </div>
-
-      <div class="sec-hdr sec-prd">PRD Complete (R&amp;S + Copper + AOC + PRD) — 2 MORs</div>
-      <div class="mor-item">
-        <div class="mor-name">DC116</div>
-        <div class="mor-desc">PRD 10 · AOC 10 · InMor Copper · PSM4 · LCs · Power</div>
-        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC 10</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
-      </div>
-      <div class="mor-item">
-        <div class="mor-name">DL158</div>
-        <div class="mor-desc">PRD 10 · AOC · InMor Copper · PSM4 · LCs · Power</div>
-        <div class="tags"><span class="tag t-prd">PRD 10</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-psm">PSM4</span></div>
-      </div>
-
-      <div class="sec-hdr sec-assigned">Assigned — 2 MORs</div>
-      <div class="mor-item">
-        <div class="mor-name">AL116</div>
-        <div class="mor-desc">Brooksource</div>
-      </div>
-      <div class="mor-item">
-        <div class="mor-name">ED158</div>
-        <div class="mor-desc">Brooksource</div>
-      </div>
-
-      <div class="sec-hdr sec-summary">Summary — Victor Valdez · PrimeTS · 40 MORs total</div>
-      <div class="sum-grid">
-        <div class="sum-card sc-r"><div class="sum-n">6</div><div class="sum-l">Ready</div></div>
-        <div class="sum-card sc-s"><div class="sum-n">3</div><div class="sum-l">Staging</div></div>
-        <div class="sum-card sc-a"><div class="sum-n">2</div><div class="sum-l">Assigned</div></div>
-        <div class="sum-card sc-e"><div class="sum-n">29</div><div class="sum-l">Empty</div></div>
-      </div>
-
     </div>
   </div>
 
+  <div class="section">
+    <div class="sec-hdr hdr-ready">✓ Ready — 6 MORs</div>
+    <div class="sec-body">
+      <div class="mor-row">
+        <span class="mor-name">DC116</span>
+        <span class="mor-detail">R&amp;S · PSM4 · LCs · Power · InMor Copper · PRD 20 · AOC · PRD Copper ✓</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">DC158</span>
+        <span class="mor-detail">R&amp;S · PSM4 · InMor Copper · PRD 20 · AOC · PRD Copper ✓</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">DL158</span>
+        <span class="mor-detail">R&amp;S · PSM4 · LCs · Power · InMor Copper · AOC · PRD 20 · PRD Copper ✓</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">BI158</span>
+        <span class="mor-detail">R&amp;S · PSM4 · LCs · Power · InMor Copper · PRD 20 · AOC · PRD Copper ✓</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">ED116</span>
+        <span class="mor-detail">R&amp;S · PRD 10 · LCs · Power · No InMor Copper</span>
+        <div><span class="tag t-prd">PRD 10</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">ED116</span>
+        <span class="mor-detail">Brooksource — Assigned</span>
+        <div><span class="tag t-prog">Assigned</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-hdr hdr-prd">PRD Complete (R&amp;S + InMor Cu + PRD Cu + AOC + PRD) — 4 MORs</div>
+    <div class="sec-body">
+      <div class="mor-row">
+        <span class="mor-name">DC116</span>
+        <span class="mor-detail">PRD 20 · AOC · InMor Copper · PRD Copper · PSM4 · LCs · Power</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">DC158</span>
+        <span class="mor-detail">PRD 20 · AOC · InMor Copper · PRD Copper · PSM4</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">DL158</span>
+        <span class="mor-detail">PRD 20 · AOC · InMor Copper · PRD Copper · PSM4 · LCs · Power</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+      <div class="mor-row">
+        <span class="mor-name">BI158</span>
+        <span class="mor-detail">PRD 20 · AOC · InMor Copper · PRD Copper · PSM4 · LCs · Power</span>
+        <div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-hdr hdr-summary">Assigned — 2 MORs</div>
+    <div class="sec-body">
+      <div class="mor-row"><span class="mor-name">AL116</span><span class="mor-detail">Brooksource</span></div>
+      <div class="mor-row"><span class="mor-name">ED116</span><span class="mor-detail">Brooksource</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sec-hdr hdr-summary">Summary — Victor Valdez · PrimeTS · 40 MORs total</div>
+    <div class="stat-grid">
+      <div class="stat-card s-ready"><div class="stat-num">6</div><div class="stat-lbl">Ready</div></div>
+      <div class="stat-card s-progress"><div class="stat-num">1</div><div class="stat-lbl">In Progress</div></div>
+      <div class="stat-card s-staging"><div class="stat-num">3</div><div class="stat-lbl">Staging</div></div>
+      <div class="stat-card s-assigned"><div class="stat-num">2</div><div class="stat-lbl">Assigned</div></div>
+    </div>
+  </div>
 </div>
-</body>
-</html>
+</div>
