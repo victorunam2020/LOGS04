@@ -8,6 +8,7 @@
 .sec-hdr{padding:7px 12px;font-size:11px;font-weight:500;color:#fff;}
 .hdr-today{background:#7C3AED;} .hdr-progress{background:#4C1D95;}
 .hdr-assigned{background:#1E3A8A;} .hdr-ready{background:#065F46;} .hdr-summary{background:#1F2937;}
+.hdr-staging{background:#92400E;}
 .sec-body{padding:8px 12px;background:#fff;}
 .mor-row{display:flex;flex-direction:column;padding:5px 0;border-bottom:1px solid #F1F5F9;}
 .mor-row:last-child{border-bottom:none;}
@@ -16,8 +17,6 @@
 .mor-prd{font-size:10px;color:#1D4ED8;margin-top:2px;font-weight:500;}
 .tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:500;margin-right:3px;margin-top:2px;}
 .t-prd{background:#E6F1FB;color:#0C447C;} .t-aoc{background:#EEEDFE;color:#26215C;} .t-cu{background:#FEF3C7;color:#633806;}
-
-/* COLLAPSIBLE PRD */
 .collapse-hdr{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;font-size:11px;font-weight:500;color:#fff;background:#1D4ED8;cursor:pointer;user-select:none;}
 .collapse-hdr:hover{background:#1849B4;}
 .collapse-arrow{font-size:11px;transition:transform .2s;}
@@ -33,7 +32,6 @@
 .prd-item-name{font-size:10px;font-weight:500;color:#1F2937;}
 .prd-item-val{font-size:9px;color:#1D4ED8;margin-top:1px;}
 .prd-item.warn .prd-item-val{color:#DC2626;}
-
 .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:8px 12px;background:#fff;}
 .stat-grid-2{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 12px 8px;background:#fff;}
 .stat-card{text-align:center;padding:8px 4px;border-radius:6px;}
@@ -43,6 +41,7 @@
 .sc-a{background:#DBEAFE;} .sc-a .stat-num{color:#1E3A8A;} .sc-a .stat-lbl{color:#2563EB;}
 .sc-r{background:#D1FAE5;} .sc-r .stat-num{color:#065F46;} .sc-r .stat-lbl{color:#059669;}
 .sc-e{background:#F3F4F6;} .sc-e .stat-num{color:#374151;} .sc-e .stat-lbl{color:#6B7280;}
+.sc-st{background:#FEF3C7;} .sc-st .stat-num{color:#92400E;} .sc-st .stat-lbl{color:#D97706;}
 .credit{font-size:10px;color:#94A3B8;text-align:center;margin-top:4px;}
 .update-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #F1F5F9;}
 .update-item:last-child{border-bottom:none;}
@@ -56,7 +55,6 @@
 .wf-ready{background:#D1FAE5;color:#065F46;} .wf-progress{background:#EDE9FE;color:#4C1D95;}
 .wf-pending{background:#DBEAFE;color:#1D4ED8;} .wf-closed{background:#1F2937;color:#fff;}
 </style>
-
 <div class="wrap">
 <div class="map-col">
 <svg width="320" height="970" viewBox="0 0 320 970" style="background:#F8FAFC;display:block;">
@@ -90,7 +88,7 @@
   <rect x="4" y="104" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="104" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 2 -->
+  <!-- PAIR 2: ED116 + DY / ED158 PRD + DY158 -->
   <rect x="4" y="108" width="131" height="40" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="0.5"/>
   <text x="9" y="120" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1E3A8A;font-family:Arial;">ED116 · Brooksource</text>
   <text x="9" y="134" dominant-baseline="central" style="font-size:8px;fill:#1E3A8A;font-family:Arial;">Assigned · PRD: 10/20</text>
@@ -108,7 +106,7 @@
   <rect x="4" y="188" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="188" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 3: DU116 ASSIGNED + DU158 READY -->
+  <!-- PAIR 3: DU116 ASSIGNED + DU158 READY / DP116 + DP158 STAGING -->
   <rect x="4" y="192" width="131" height="40" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="0.5"/>
   <text x="9" y="202" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1E3A8A;font-family:Arial;">DU116 · Brooksource</text>
   <text x="9" y="216" dominant-baseline="central" style="font-size:8px;fill:#1E3A8A;font-family:Arial;">Assigned · PRD: 10/20</text>
@@ -119,37 +117,39 @@
   <text x="184" y="214" dominant-baseline="central" style="font-size:8px;fill:#065F46;font-family:Arial;">R&amp;S·LCs·Power·InMorCu·IDF</text>
   <text x="184" y="226" dominant-baseline="central" style="font-size:7.5px;fill:#059669;font-family:Arial;">Ready · PRD: Pending</text>
   <line x1="4" y1="232" x2="135" y2="232" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
-  <line x1="179" y1="232" x2="316" y2="232" stroke="#059669" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="232" x2="316" y2="232" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
   <rect x="4" y="232" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
   <text x="9" y="246" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DP116</text>
   <text x="9" y="260" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
-  <rect x="179" y="232" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
-  <text x="184" y="246" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DP158</text>
-  <text x="184" y="260" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
+  <!-- DP158 STAGING -->
+  <rect x="179" y="232" width="137" height="40" rx="2" fill="#FEF3C7" stroke="#D97706" stroke-width="0.5"/>
+  <text x="184" y="244" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#92400E;font-family:Arial;">DP158</text>
+  <text x="184" y="256" dominant-baseline="central" style="font-size:8px;fill:#92400E;font-family:Arial;">R&amp;S materials arrived</text>
+  <text x="184" y="268" dominant-baseline="central" style="font-size:7.5px;fill:#B45309;font-family:Arial;">Staging · R&amp;S pending</text>
   <rect x="4" y="272" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="272" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 4 -->
+  <!-- PAIR 4: DL116 + DC116 PRD / DL158 PRD COMPLETE + DG158 PRD COMPLETE -->
   <rect x="4" y="276" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
   <text x="9" y="290" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">DL116</text>
   <text x="9" y="304" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
-  <rect x="179" y="276" width="137" height="40" rx="2" fill="#EDE9FE" stroke="#4C1D95" stroke-width="1"/>
-  <text x="184" y="286" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#4C1D95;font-family:Arial;">DL158 🔧 · Prime</text>
-  <text x="184" y="298" dominant-baseline="central" style="font-size:8px;fill:#4C1D95;font-family:Arial;">R&amp;S·PSM4·InMorCu·AOC·PRD20·Cu</text>
-  <text x="184" y="311" dominant-baseline="central" style="font-size:7.5px;fill:#6D28D9;font-family:Arial;">PRD: 20/20 · In Progress</text>
+  <!-- DL158 PRD COMPLETE -->
+  <rect x="179" y="276" width="137" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
+  <text x="184" y="288" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">DL158 ✓</text>
+  <text x="184" y="302" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 20/20 · Racks: Pending</text>
   <line x1="4" y1="316" x2="135" y2="316" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
-  <line x1="179" y1="316" x2="316" y2="316" stroke="#4C1D95" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="316" x2="316" y2="316" stroke="#1D4ED8" stroke-width="0.5" stroke-dasharray="2 2"/>
   <rect x="4" y="316" width="131" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
   <text x="9" y="330" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">DC116</text>
   <text x="9" y="344" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 20/20 · Racks: Pending</text>
-  <rect x="179" y="316" width="137" height="40" rx="2" fill="#EDE9FE" stroke="#4C1D95" stroke-width="1"/>
-  <text x="184" y="326" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#4C1D95;font-family:Arial;">DG158 🔧 · Prime</text>
-  <text x="184" y="338" dominant-baseline="central" style="font-size:8px;fill:#4C1D95;font-family:Arial;">R&amp;S·PSM4·InMorCu·AOC·PRD20·Cu</text>
-  <text x="184" y="351" dominant-baseline="central" style="font-size:7.5px;fill:#6D28D9;font-family:Arial;">PRD: 20/20 · In Progress</text>
+  <!-- DG158 PRD COMPLETE -->
+  <rect x="179" y="316" width="137" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
+  <text x="184" y="328" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">DG158 ✓</text>
+  <text x="184" y="342" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 20/20 · Racks: Pending</text>
   <rect x="4" y="356" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="356" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 5 -->
+  <!-- PAIR 5: DG116 (top) + Cx116 / DC158 PRD + CX158 — DG116 now above DC116 -->
   <rect x="4" y="360" width="131" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
   <text x="9" y="374" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">DG116</text>
   <text x="9" y="388" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 20/20 · Racks: Pending</text>
@@ -179,7 +179,7 @@
   <text x="69" y="457" text-anchor="middle" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#fff;font-family:Arial;">Cell 1 ↓  Cell 3 ↑</text>
   <text x="247" y="457" text-anchor="middle" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#fff;font-family:Arial;">Cell 2 ↓  Cell 4 ↑</text>
 
-  <!-- PAIR 6 -->
+  <!-- PAIR 6: BR116 + BM116 PRD / BR158 + BM158 -->
   <rect x="4" y="466" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
   <text x="9" y="480" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BR116</text>
   <text x="9" y="494" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
@@ -197,16 +197,16 @@
   <rect x="4" y="546" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="546" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 7 -->
+  <!-- PAIR 7: BI116 + BD116 / BI158 PRD COMPLETE + BD158 -->
   <rect x="4" y="550" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
   <text x="9" y="564" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">BI116</text>
   <text x="9" y="578" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
-  <rect x="179" y="550" width="137" height="40" rx="2" fill="#EDE9FE" stroke="#4C1D95" stroke-width="1"/>
-  <text x="184" y="560" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#4C1D95;font-family:Arial;">BI158 🔧 · Prime</text>
-  <text x="184" y="572" dominant-baseline="central" style="font-size:8px;fill:#4C1D95;font-family:Arial;">R&amp;S·PSM4·LCs·Power·InMorCu·PRD20·AOC</text>
-  <text x="184" y="585" dominant-baseline="central" style="font-size:7.5px;fill:#6D28D9;font-family:Arial;">PRD: 20/20 · In Progress</text>
+  <!-- BI158 PRD COMPLETE -->
+  <rect x="179" y="550" width="137" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
+  <text x="184" y="562" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">BI158 ✓</text>
+  <text x="184" y="576" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 20/20 · Racks: Pending</text>
   <line x1="4" y1="590" x2="135" y2="590" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
-  <line x1="179" y1="590" x2="316" y2="590" stroke="#4C1D95" stroke-width="0.5" stroke-dasharray="2 2"/>
+  <line x1="179" y1="590" x2="316" y2="590" stroke="#1D4ED8" stroke-width="0.5" stroke-dasharray="2 2"/>
   <rect x="4" y="590" width="131" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
   <text x="9" y="604" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">BD116</text>
   <text x="9" y="618" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 20/20 · Racks: Pending</text>
@@ -216,7 +216,7 @@
   <rect x="4" y="630" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="630" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 8 -->
+  <!-- PAIR 8: AZ116 + AU116 door / AZ158 + AU158 -->
   <rect x="4" y="634" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
   <text x="9" y="648" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AZ116</text>
   <text x="9" y="662" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
@@ -236,13 +236,14 @@
   <rect x="4" y="714" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="714" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 9 -->
+  <!-- PAIR 9: AQ116 + AL116 / AQ158 PRD COMPLETE + AL158 -->
   <rect x="4" y="718" width="131" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
   <text x="9" y="730" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">AQ116 · Prime</text>
   <text x="9" y="744" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 1/20 · Racks: Pending</text>
-  <rect x="179" y="718" width="137" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
-  <text x="184" y="730" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AQ158</text>
-  <text x="184" y="744" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
+  <!-- AQ158 PRD COMPLETE -->
+  <rect x="179" y="718" width="137" height="40" rx="2" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="0.5"/>
+  <text x="184" y="730" dominant-baseline="central" style="font-size:9px;font-weight:500;fill:#1D4ED8;font-family:Arial;">AQ158 ✓</text>
+  <text x="184" y="744" dominant-baseline="central" style="font-size:8px;fill:#1D4ED8;font-family:Arial;">PRD: 20/20 · Racks: Pending</text>
   <line x1="4" y1="758" x2="135" y2="758" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
   <line x1="179" y1="758" x2="316" y2="758" stroke="#E2E8F0" stroke-width="0.5" stroke-dasharray="2 2"/>
   <rect x="4" y="758" width="131" height="40" rx="2" fill="#DBEAFE" stroke="#2563EB" stroke-width="0.5"/>
@@ -254,7 +255,7 @@
   <rect x="4" y="798" width="131" height="4" fill="#F1F5F9"/>
   <rect x="179" y="798" width="137" height="4" fill="#F1F5F9"/>
 
-  <!-- PAIR 10 -->
+  <!-- PAIR 10: AH + AC -->
   <rect x="4" y="802" width="131" height="40" rx="2" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
   <text x="9" y="816" dominant-baseline="central" style="font-size:9px;fill:#9CA3AF;font-family:Arial;">AH116</text>
   <text x="9" y="830" dominant-baseline="central" style="font-size:8px;fill:#CBD5E1;font-family:Arial;">Empty</text>
@@ -292,18 +293,18 @@
   <text x="151" y="915" dominant-baseline="central" style="font-size:7px;fill:#374151;font-family:Arial;">Assigned</text>
   <rect x="196" y="912" width="8" height="6" rx="1" fill="#D1FAE5" stroke="#059669" stroke-width="0.5"/>
   <text x="207" y="915" dominant-baseline="central" style="font-size:7px;fill:#374151;font-family:Arial;">Ready</text>
-  <rect x="232" y="912" width="8" height="6" rx="1" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.5"/>
-  <text x="243" y="915" dominant-baseline="central" style="font-size:7px;fill:#374151;font-family:Arial;">Empty</text>
+  <rect x="232" y="912" width="8" height="6" rx="1" fill="#FEF3C7" stroke="#D97706" stroke-width="0.5"/>
+  <text x="243" y="915" dominant-baseline="central" style="font-size:7px;fill:#374151;font-family:Arial;">Staging</text>
   <rect x="270" y="912" width="8" height="6" rx="1" fill="#FFFFFF" stroke="#1B6B8A" stroke-width="1.5"/>
   <text x="281" y="915" dominant-baseline="central" style="font-size:7px;fill:#374151;font-family:Arial;">Door</text>
-  <text x="8" y="927" dominant-baseline="central" style="font-size:7px;fill:#374151;font-family:Arial;">🔧 = R&amp;S In Progress · Prime</text>
+  <text x="8" y="927" dominant-baseline="central" style="font-size:7px;fill:#374151;font-family:Arial;">✓ = PRD Complete · Racks Pending</text>
 
   <!-- Footer -->
   <rect x="2" y="934" width="316" height="22" rx="3" fill="#0F172A"/>
   <text x="10" y="947" dominant-baseline="central" style="font-size:7.5px;font-weight:500;fill:#94A3B8;font-family:Arial;">Prepared by: Victor Valdez · Prime Technical Services · EAT04</text>
-  <text x="306" y="947" text-anchor="end" dominant-baseline="central" style="font-size:7.5px;fill:#475569;font-family:Arial;">Apr 19, 2026</text>
+  <text x="306" y="947" text-anchor="end" dominant-baseline="central" style="font-size:7.5px;fill:#475569;font-family:Arial;">Apr 21, 2026</text>
 </svg>
-<div class="credit">© Victor Valdez · Prime Technical Services · EAT04 · Apr 19, 2026</div>
+<div class="credit">© Victor Valdez · Prime Technical Services · EAT04 · Apr 21, 2026</div>
 </div>
 
 <!-- RIGHT COLUMN -->
@@ -321,12 +322,13 @@
   </div>
 
   <div class="section">
-    <div class="sec-hdr hdr-today">Today's Update — Apr 19, 2026</div>
+    <div class="sec-hdr hdr-today">Today's Update — Apr 21, 2026</div>
     <div class="sec-body">
-      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">DG158</span> — PRD Copper arrived · PRD: 20/20 · R&amp;S In Progress (Prime)</div></div>
-      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">BI158</span> — R&amp;S In Progress (Prime) · PRD: 20/20</div></div>
-      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">DL158</span> — R&amp;S In Progress (Prime) · PRD: 20/20</div></div>
-      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">DU158</span> — R&amp;S · LCs · Power · InMor Copper · IDF complete · Ready for PRD</div></div>
+      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">DL158</span> — PRD Complete · PRD: 20/20 · Racks: Pending</div></div>
+      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">DG158</span> — PRD Complete · PRD: 20/20 · Racks: Pending</div></div>
+      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">BI158</span> — PRD Complete · PRD: 20/20 · Racks: Pending</div></div>
+      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">AQ158</span> — PRD Complete · PRD: 20/20 · Racks: Pending</div></div>
+      <div class="update-item"><div class="update-dot"></div><div class="update-text"><span class="update-mor">DP158</span> — R&amp;S materials arrived · Staging</div></div>
     </div>
   </div>
 
@@ -342,18 +344,19 @@
   </div>
 
   <div class="section">
-    <div class="sec-hdr hdr-progress">🔧 In Progress — 3 MORs · Prime</div>
+    <div class="sec-hdr hdr-staging">Staging — 1 MOR</div>
     <div class="sec-body">
-      <div class="mor-row"><span class="mor-name">DG158 <span style="font-size:10px;color:#6D28D9;">· Prime</span></span><span class="mor-prd">PRD: 20/20 · Racks: Pending</span><div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div></div>
-      <div class="mor-row"><span class="mor-name">BI158 <span style="font-size:10px;color:#6D28D9;">· Prime</span></span><span class="mor-prd">PRD: 20/20 · Racks: Pending</span><div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div></div>
-      <div class="mor-row"><span class="mor-name">DL158 <span style="font-size:10px;color:#6D28D9;">· Prime</span></span><span class="mor-prd">PRD: 20/20 · Racks: Pending</span><div><span class="tag t-prd">PRD 20</span><span class="tag t-aoc">AOC</span><span class="tag t-cu">InMor Cu</span><span class="tag t-cu">PRD Cu</span></div></div>
+      <div class="mor-row">
+        <span class="mor-name">DP158</span>
+        <span class="mor-detail">R&amp;S materials arrived · Installation pending</span>
+      </div>
     </div>
   </div>
 
   <!-- COLLAPSIBLE PRD -->
   <div class="section">
     <div class="collapse-hdr" onclick="togglePRD()">
-      <span>PRD Complete — Racks Pending · 11 MORs</span>
+      <span>PRD Complete — Racks Pending · 15 MORs</span>
       <span class="collapse-arrow" id="prd-arrow">▼</span>
     </div>
     <div class="collapse-chips">
@@ -361,10 +364,14 @@
       <span class="prd-chip">DC116 20/20</span>
       <span class="prd-chip">DC158 20/20</span>
       <span class="prd-chip">ED158 20/20</span>
+      <span class="prd-chip">DL158 20/20</span>
+      <span class="prd-chip">DG158 20/20</span>
       <span class="prd-chip">BD116 20/20</span>
       <span class="prd-chip">BD158 20/20</span>
       <span class="prd-chip">AU116 20/20</span>
       <span class="prd-chip">AL158 20/20</span>
+      <span class="prd-chip">BI158 20/20</span>
+      <span class="prd-chip">AQ158 20/20</span>
       <span class="prd-chip warn">AQ116 1/20</span>
       <span class="prd-chip warn">AZ158 5/20</span>
       <span class="prd-chip warn">BM116 2/20</span>
@@ -375,10 +382,14 @@
         <div class="prd-item"><div class="prd-item-name">DC116</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
         <div class="prd-item"><div class="prd-item-name">DC158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
         <div class="prd-item"><div class="prd-item-name">ED158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
+        <div class="prd-item"><div class="prd-item-name">DL158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
+        <div class="prd-item"><div class="prd-item-name">DG158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
         <div class="prd-item"><div class="prd-item-name">BD116</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
         <div class="prd-item"><div class="prd-item-name">BD158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
         <div class="prd-item"><div class="prd-item-name">AU116</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
         <div class="prd-item"><div class="prd-item-name">AL158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
+        <div class="prd-item"><div class="prd-item-name">BI158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
+        <div class="prd-item"><div class="prd-item-name">AQ158</div><div class="prd-item-val">PRD: 20/20 · Racks: Pending</div></div>
         <div class="prd-item warn"><div class="prd-item-name">AQ116 · Prime</div><div class="prd-item-val">PRD: 1/20 · 19 pending</div></div>
         <div class="prd-item warn"><div class="prd-item-name">AZ158 · Prime</div><div class="prd-item-val">PRD: 5/20 · 15 pending</div></div>
         <div class="prd-item warn"><div class="prd-item-name">BM116 · Prime</div><div class="prd-item-val">PRD: 2/20 · 18 pending</div></div>
@@ -398,14 +409,14 @@
   <div class="section">
     <div class="sec-hdr hdr-summary">Summary — Victor Valdez · PrimeTS · 40 MORs</div>
     <div class="stat-grid">
-      <div class="stat-card sc-p"><div class="stat-num">3</div><div class="stat-lbl">In Progress</div></div>
-      <div class="stat-card sc-pend"><div class="stat-num">11</div><div class="stat-lbl">PRD Pending Racks</div></div>
+      <div class="stat-card sc-pend"><div class="stat-num">15</div><div class="stat-lbl">PRD Pending Racks</div></div>
       <div class="stat-card sc-a"><div class="stat-num">3</div><div class="stat-lbl">Assigned</div></div>
+      <div class="stat-card sc-r"><div class="stat-num">1</div><div class="stat-lbl">Ready</div></div>
     </div>
     <div class="stat-grid-2">
-      <div class="stat-card sc-r"><div class="stat-num">1</div><div class="stat-lbl">Ready</div></div>
-      <div class="stat-card sc-e"><div class="stat-num">22</div><div class="stat-lbl">Empty</div></div>
-      <div class="stat-card" style="background:#F3F4F6;"><div class="stat-num" style="color:#374151;">0</div><div class="stat-lbl" style="color:#6B7280;">Staging</div></div>
+      <div class="stat-card sc-st"><div class="stat-num">1</div><div class="stat-lbl">Staging</div></div>
+      <div class="stat-card sc-e"><div class="stat-num">20</div><div class="stat-lbl">Empty</div></div>
+      <div class="stat-card sc-p"><div class="stat-num">0</div><div class="stat-lbl">In Progress</div></div>
     </div>
   </div>
 </div>
